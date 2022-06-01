@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(dplyr, raster, ggplot2, argparser)
+pacman::p_load(tidyverse, raster, ggplot2, argparser, gtools)
 
 start.time <- Sys.time()
 
@@ -15,6 +15,7 @@ p <- add_argument(p, "--resolution", help="decrease input image resolution", def
 p <- add_argument(p, "--n", help="number of gridpoints in each direction", default= 100)
 p <- add_argument(p, "--gradient_start", help="color gradient start", default="grey20")
 p <- add_argument(p, "--gradient_end", help="color gradient end", default="grey80")
+p <- add_argument(p, "--breaks", help="the number of breaks in color scale", default=7)
 p <- add_argument(p, "--height", help="output image height in inches", default=7)
 p <- add_argument(p, "--width", help="output image width in inches", default=7)
 p <- add_argument(p, "--dpi", help="output image dpi", default=300)
@@ -22,7 +23,7 @@ p <- add_argument(p, "--dpi", help="output image dpi", default=300)
 # Parse the command line arguments
 argv <- parse_args(p)
 
-print("Welcome to Pixelate, beep boop.")
+print("Welcome to Pixelater, beep boop.")
 
 print(paste("The input file you are using is :", argv$input_file))
 
@@ -63,8 +64,9 @@ output_image <-
     contour = FALSE,
     n = argv$n
   ) + 
-  scale_fill_gradient(low = argv$gradient_start, 
-                      high = argv$gradient_end) +
+  scale_fill_steps(low = argv$gradient_start, 
+                   high = argv$gradient_end,
+                   n.breaks = argv$breaks) +
   guides(fill = "none") +
   theme_classic() +
   theme(axis.line = element_blank(),
