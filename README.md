@@ -65,3 +65,13 @@ Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate_breaks_1
 Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate_breaks_5.jpg -n 50 --gradient_start "black" --gradient_end "white" --breaks 5
 ```
 ![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/ec3c467cd145128bc31d3f9baa10ba1c6024b5ed/misc/R_logo_pixelate_breaks_5.jpg)
+
+
+```
+Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/r_logo_pix_polygon.jpg --geom "polygon" --breaks 8
+```
+
+
+```
+Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/r_logo_point.jpg --geom "point" --height 17 --width 17
+```
