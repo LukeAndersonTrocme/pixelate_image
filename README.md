@@ -70,8 +70,9 @@ Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate_breaks_5
 ```
 Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/r_logo_pix_polygon.jpg --geom "polygon" --breaks 8
 ```
-
+![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/0c86469e81d6779459fb96def6b124fc214fc3cd/misc/r_logo_pix_polygon.jpg)
 
 ```
 Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/r_logo_point.jpg --geom "point" --height 17 --width 17
 ```
+![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/0c86469e81d6779459fb96def6b124fc214fc3cd/misc/r_logo_point.jpg)
