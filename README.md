@@ -37,9 +37,12 @@ optional arguments:
   --gradient_end        color gradient end [default: grey80]
   -b, --breaks          the number of breaks in color scale [default:
                         7]
+  --geom                geometry type (raster, polygon, point, ...)
+                        [default: raster]
   --height              output image height in inches [default: 7]
   -w, --width           output image width in inches [default: 7]
   -d, --dpi             output image dpi [default: 300]
+
   ```
 
 # example
