@@ -37,4 +37,4 @@ Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate.jpg
 ```
 Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate_fancy.jpg --n 25 --gradient_start "limegreen" --gradient_end "navyblue"
 ```
-![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/d3310342796843777fba616d709ee33cb19aee25/misc/R_logo_pixelate_fancy.jpg))
+![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/d3310342796843777fba616d709ee33cb19aee25/misc/R_logo_pixelate_fancy.jpg)
