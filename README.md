@@ -1,7 +1,21 @@
-# pixelate_image
+```                                                                                                                                                                 
+                                                           .---.                                           
+_________   _...._     .--.                   __.....__    |   |                     __.....__             
+\        |.'      '-.  |__|               .-''         '.  |   |                 .-''         '.           
+ \        .'```'.    '..--.              /     .-''"'-.  `.|   |            .|  /     .-''"'-.  `..-,.--.  
+  \      |       \     |  |____     ____/     /________\   |   |   __     .' |_/     /________\   |  .-. | 
+   |     |        |    |  `.   \  .'    |                  |   |.:--.'. .'     |                  | |  | | 
+   |      \      /    .|  | `.  `'    .'\    .-------------|   / |   \ '--.  .-\    .-------------| |  | | 
+   |     |\`'-.-'   .' |  |   '.    .'   \    '-.____...---|   `" __ | |  |  |  \    '-.____...---| |  '-  
+   |     | '-....-'`   |__|   .'     `.   `.             .'|   |.'.''| |  |  |   `.             .'| |      
+  .'     '.                 .'  .'`.   `.   `''-...... -'  '---/ /   | |_ |  '.'   `''-...... -'  | |      
+'-----------'             .'   /    `.   `.                    \ \._,\ '/ |   /                   |_|      
+                         '----'       '----'                    `--'  `"  `'-'                             
+```
+
 A small R script that pixelates images
 
-# usage
+# parameters
 
 pixelate an image
 
@@ -21,7 +35,21 @@ optional arguments:
                         [default: 100]
   -g, --gradient_start  color gradient start [default: grey20]
   --gradient_end        color gradient end [default: grey80]
-  --height              output image height in inches [default: 11]
-  -w, --width           output image width in inches [default: 8]
+  --height              output image height in inches [default: 7]
+  -w, --width           output image width in inches [default: 7]
   -d, --dpi             output image dpi [default: 300]
   ```
+
+# example
+
+default parameters
+```
+Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate.jpg
+```
+![default_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/d3310342796843777fba616d709ee33cb19aee25/misc/R_logo_pixelate.jpg)
+
+custom parameters
+```
+Rscript code/pixelate_image_v0.2.R misc/R_logo.png misc/R_logo_pixelate_fancy.jpg --n 25 --gradient_start "limegreen" --gradient_end "navyblue"
+```
+![fancy_pixelate](https://github.com/LukeAndersonTrocme/pixelate_image/blob/d3310342796843777fba616d709ee33cb19aee25/misc/R_logo_pixelate_fancy.jpg)
