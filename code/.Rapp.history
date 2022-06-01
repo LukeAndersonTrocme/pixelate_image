@@ -1,0 +1,97 @@
+input <- "~/Documents/nick_tiff/benCyan"
+gplot_data <- function(x, maxpixels = 50000)  {#
+  x <- raster::sampleRegular(x, maxpixels, asRaster = TRUE)#
+  coords <- raster::xyFromCell(x, seq_len(raster::ncell(x)))#
+  ## Extract values#
+  dat <- utils::stack(as.data.frame(raster::getValues(x))) #
+  names(dat) <- c('value', 'variable')#
+  dat <- dplyr::as_tibble(data.frame(coords, dat))#
+  if (!is.null(levels(x))) {#
+    dat <- dplyr::left_join(dat, levels(x)[[1]], #
+                            by = c("value" = "ID"))#
+  }#
+  dat#
+}
+input <- raster::raster("~/Documents/nick_tiff/benCyan" %>% #
+  gplot_data(., maxpixels = 1e3)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% #
+  gplot_data(., maxpixels = 1e3)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3)
+pacman::p_load(dplyr, raster, ggplot2, argparser)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3)
+input
+?quantile
+?stats::quantile
+breaks <- 10
+mutate(percentile = stats::quantile(value, seq(0,1,1/breaks)))
+input <- raster::raster(argv$input_file) %>% #
+  gplot_data(., maxpixels = argv$resolution) %>%#
+  mutate(percentile = stats::quantile(value, seq(0,1,1/breaks)))
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(percentile = stats::quantile(value, seq(0,1,1/breaks)))
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(percentile = stats::quantile(value, seq(0,max(value),1/breaks)))
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = cut(value, c(quantile(value, probs = seq(0, 1, by = 0.20))))
+)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = cut(value, c(quantile(value, probs = seq(0, 1, by = 0.20))))
+ç
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = ntile(value, ngroups = breaks))
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = ntile(value, ngroups = breaks))
+install.packages("gtools")
+install.packages("gtools")
+install.packages("gtools")
+library(gtools)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks))
+input
+tally(input$group)
+table(input$group)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks), left_bin = lower = as.numeric( sub("\\((.+),.*", "\\1", group) )
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks), lower = as.numeric( sub("\\((.+),.*", "\\1", group) )
+)
+input
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks, right=TRUE), lower = as.numeric( sub("\\((.+),.*", "\\1", group) )
+)
+input
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks, right=FALSE), lower = as.numeric( sub("\\((.+),.*", "\\1", group) )
+)
+input
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(group = quantcut(value, q = breaks), lower = as.numeric( sub("\\((.+),.*", "\\1", group)))
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(g = quantcut(value, q = 3)) %>% #
+  mutate(x_tmp = str_sub(g, 2, -2)) %>% #
+  separate(x_tmp, c("min", "max"), sep = ",") %>% #
+  mutate(min = ifelse(!is.na(max), as.numeric(as.character(min)), as.numeric(as.character(g))))
+library(tidyverse)
+library(tidyverse)
+input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
+  dplyr::mutate(g = quantcut(value, q = 3)) %>% #
+  mutate(x_tmp = str_sub(g, 2, -2)) %>% #
+  separate(x_tmp, c("min", "max"), sep = ",") %>% #
+  mutate(min = ifelse(!is.na(max), as.numeric(as.character(min)), as.numeric(as.character(g))))
+input
+input %>%#
+  ggplot(., aes(x, y)) +#
+  stat_density_2d(#
+    geom = "raster",#
+    aes(fill = min),#
+    contour = FALSE,#
+    n = argv$n#
+  )
+input %>%#
+  ggplot(., aes(x, y)) +#
+  stat_density_2d(#
+    geom = "raster",#
+    aes(fill = min),#
+    contour = FALSE,#
+    n = 50#
+  )
