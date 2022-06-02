@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, raster, ggplot2, argparser, gtools)
+pacman::p_load(tidyverse, raster, ggplot2, argparser, gtools, tools)
 
 start.time <- Sys.time()
 
@@ -11,6 +11,7 @@ p <- arg_parser("pixelate an image")
 p <- add_argument(p, "input_file", help="name of input image file")
 p <- add_argument(p, "output_file", help="base name of output image file")
 p <- add_argument(p, "--verbose", help="print stuff", flag = TRUE)
+p <- add_argument(p, "--exportRDS", help="export ggplot as RDS for downstream processing", flag = TRUE)
 p <- add_argument(p, "--resolution", help="decrease input image resolution", default=1e3)
 p <- add_argument(p, "--n", help="number of gridpoints in each direction", default= 100)
 p <- add_argument(p, "--gradient_start", help="color gradient start", default="grey20")
@@ -119,6 +120,16 @@ if(argv$geom == "polygon"){
 
 ggsave(output_image, filename = argv$output_file, 
        height = argv$height, width = argv$width)
+
+if(argv$exportRDS){
+  
+  base = tools::file_path_sans_ext(argv$output_file)
+  rds_filename = paste0(base,".RDS")
+  
+  print(paste("Saving ggplot object here :",rds_filename))
+  
+  saveRDS(output_image, file = rds_filename)
+}
 
 print(paste("Output file is saved here :", argv$output_file))
 
