@@ -100,7 +100,8 @@ if(!argv$increment){
             plot.background = element_rect(fill = "transparent", color = NA))
     
     base = tools::file_path_sans_ext(argv$output_file)
-    layer_filename = paste0(base,"_",j,"_",layer,".jpg")
+    ext = tools::file_ext(argv$output_file)
+    layer_filename = paste0(base,"_",j,"_",layer,".", ext)
     ggsave(layer_plot, filename = layer_filename, 
            height = argv$height, width = argv$width,  bg = "transparent")
     j <- j + 1
@@ -134,7 +135,8 @@ if(argv$increment){
             plot.background = element_rect(fill = "transparent", color = NA))
     
     base = tools::file_path_sans_ext(argv$output_file)
-    layer_filename = paste0(base,"_",layer,"_increment_",j,".jpg")
+    ext = tools::file_ext(argv$output_file)
+    layer_filename = paste0(base,"_",j,"_",layer,"_increment.", ext)
     ggsave(layer_plot, filename = layer_filename, 
            height = argv$height, width = argv$width,  bg = "transparent")
     j <- j + 1
