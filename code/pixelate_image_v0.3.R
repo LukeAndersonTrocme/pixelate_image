@@ -56,70 +56,80 @@ input <- raster::raster(argv$input_file) %>%
 input_long_format <- with(input, input[rep(1:nrow(input), value),])
 
 if(argv$geom == "raster"){
-	output_image <- 
-  		input_long_format %>%
-  		ggplot(., aes(x, y)) +
-  		stat_density_2d(
-    			geom = argv$geom,
-    			aes(fill = after_stat(density)),
-    			contour = FALSE,
-    			n = argv$n
-  				) + 
-  		scale_fill_steps(low = argv$gradient_start, 
-                     	 high = argv$gradient_end,
-                         n.breaks = argv$breaks) +
-  		guides(fill = "none") +
-  		theme_classic() +
-  		theme(axis.line = element_blank(),
-              axis.text = element_blank(),
-              axis.title = element_blank(),
-              axis.ticks = element_blank())
+  output_image <- 
+    input_long_format %>%
+    ggplot(., aes(x, y)) +
+    stat_density_2d(
+      geom = argv$geom,
+      aes(fill = after_stat(density)),
+      contour = FALSE,
+      n = argv$n
+    ) + 
+    scale_fill_steps(low = argv$gradient_start, 
+                     high = argv$gradient_end,
+                     n.breaks = argv$breaks) +
+    guides(fill = "none") +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA)
+    )
 }
 
 if(argv$geom == "point"){
-	print("Note: for point, no color gradients")
-	print("Tip: to change apparent point size, change `height` and `width` parameters")
-	output_image <- 
-  		input_long_format %>%
-  		ggplot(., aes(x, y)) +
-  		stat_density_2d(
-    			geom = argv$geom,
-    			aes(size = after_stat(density)),
-    			contour = FALSE,
-    			n = argv$n
-  				) + 
-  	    scale_size(trans = 'reverse') +
-  		guides(size = "none") +
-  		theme_classic() +
-  		theme(axis.line = element_blank(),
-              axis.text = element_blank(),
-              axis.title = element_blank(),
-              axis.ticks = element_blank())
+  print("Note: for point, no color gradients")
+  print("Tip: to change apparent point size, change `height` and `width` parameters")
+  output_image <- 
+    input_long_format %>%
+    ggplot(., aes(x, y)) +
+    stat_density_2d(
+      geom = argv$geom,
+      aes(size = after_stat(density)),
+      contour = FALSE,
+      n = argv$n
+    ) + 
+    scale_size(trans = 'reverse') +
+    guides(size = "none") +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA))
 }
 
 if(argv$geom == "polygon"){
-	print("Note: for polygon only greyscale available currently")
-	
-	output_image <- 
-  		input_long_format %>%
-  		ggplot(., aes(x, y)) +
-  		stat_density2d_filled(
-    			n = argv$n,
-    			bins = argv$breaks
-  				) + 
-  		scale_fill_grey() +
-  		guides(fill = "none") +
-  		theme_classic() +
-  		theme(axis.line = element_blank(),
-         	  axis.text = element_blank(),
-          	  axis.title = element_blank(),
-              axis.ticks = element_blank())
+  print("Note: for polygon only greyscale available currently")
+  
+  output_image <- 
+    input_long_format %>%
+    ggplot(., aes(x, y)) +
+    stat_density2d_filled(
+      n = argv$n,
+      bins = argv$breaks
+    ) + 
+    scale_fill_grey() +
+    guides(fill = "none") +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA))
 }
 
 
 
 ggsave(output_image, filename = argv$output_file, 
-       height = argv$height, width = argv$width)
+       height = argv$height, width = argv$width,  bg = "transparent")
 
 if(argv$exportRDS){
   

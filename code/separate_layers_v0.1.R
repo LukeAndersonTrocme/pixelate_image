@@ -36,6 +36,9 @@ if (!argv$no_directory){
   dir.create(file.path(path), showWarnings = FALSE)
   setwd(file.path(path))
   argv$output_file <- basename(argv$output_file)
+  
+  ggsave(inputRDS, filename = argv$output_file, 
+         height = argv$height, width = argv$width,  bg = "transparent")
 }
 
 
@@ -76,6 +79,7 @@ all_layers <- do.call(rbind, layer_overlap)
 
 
 if(!argv$increment){
+  j <- 1
   for (layer in unique(polys_dat$fill)){
     layer_plot <-
       ggplot() +
@@ -83,21 +87,23 @@ if(!argv$increment){
       geom_sf(data = all_layers, 
               aes(geometry=geometry),fill = alpha("white", 0), size = 0) +
       geom_sf(data = layer_overlap[[layer]], 
-              aes(geometry=geometry, fill = as.factor(inside)), size = argv$line_width, color = "black")+
-      scale_fill_manual(values = c("black",alpha("white", 0)))+
+              aes(geometry=geometry, fill = as.factor(inside)), size = argv$line_width, color = "grey40")+
+      scale_fill_manual(values = c("grey40",alpha("white", 0)))+
       guides(fill="none")+
       theme_classic() +
       theme(axis.line = element_blank(),
             axis.text = element_blank(),
             axis.title = element_blank(),
             axis.ticks = element_blank(),
-            legend.position = "bottom",
-            legend.direction = "horizontal")
+            plot.margin = margin(0,0,0,0),
+            panel.background = element_rect(fill = "transparent"),
+            plot.background = element_rect(fill = "transparent", color = NA))
     
     base = tools::file_path_sans_ext(argv$output_file)
-    layer_filename = paste0(base,"_",layer,".jpg")
+    layer_filename = paste0(base,"_",j,"_",layer,".jpg")
     ggsave(layer_plot, filename = layer_filename, 
-           height = argv$height, width = argv$width)
+           height = argv$height, width = argv$width,  bg = "transparent")
+    j <- j + 1
   }
 }
 
@@ -115,21 +121,22 @@ if(argv$increment){
       geom_sf(data = all_layers, 
               aes(geometry=geometry), fill = alpha("white", 0), size = 0) +
       geom_sf(data = new_layers, 
-              aes(geometry=geometry, fill = as.factor(inside)), size = argv$line_width, color = "black")+
-      scale_fill_manual(values = c("black",alpha("white", 0)))+
+              aes(geometry=geometry, fill = as.factor(inside)), size = argv$line_width, color = "grey40")+
+      scale_fill_manual(values = c("grey40",alpha("white", 0)))+
       guides(fill="none")+
       theme_classic() +
       theme(axis.line = element_blank(),
             axis.text = element_blank(),
             axis.title = element_blank(),
             axis.ticks = element_blank(),
-            legend.position = "bottom",
-            legend.direction = "horizontal")
+            plot.margin = margin(0,0,0,0),
+            panel.background = element_rect(fill = "transparent"),
+            plot.background = element_rect(fill = "transparent", color = NA))
     
     base = tools::file_path_sans_ext(argv$output_file)
     layer_filename = paste0(base,"_",layer,"_increment_",j,".jpg")
     ggsave(layer_plot, filename = layer_filename, 
-           height = argv$height, width = argv$width)
+           height = argv$height, width = argv$width,  bg = "transparent")
     j <- j + 1
   }
 }
