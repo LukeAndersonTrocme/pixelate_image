@@ -1,0 +1,177 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+# Load function
+source("~/Documents/pixelate_image/code/patternfun.R")
+library(sf)
+```
+
+
+
+```{r}
+test_slice <- readRDS("/Users/luke/Documents/pixelate_image/misc/mona_poly_crop_25_b10.RDS")
+# build the plot w/o plotting it
+gb <- ggplot_build(test_slice)
+dat <- gb$data[[1]]
+# rename groups
+dat$my_group <- paste0(dat$group,dat$subgroup)
+
+# prep metadata
+meta_data <- dat %>% distinct(fill, my_group, level) %>% dplyr::rename(id = my_group)
+
+# make some polygons!
+SpatialPolygons(lapply(unique(dat$my_group), function(x) {
+  pts <- dat[dat$my_group == x,]
+  Polygons(list(Polygon(as.matrix(data.frame(x=pts$x, y=pts$y)))), as.character(x))
+})) -> polys
+
+# make a SPDF (add more data to it if you need to)
+polys_dat <- 
+  SpatialPolygonsDataFrame(polys, 
+                           data.frame(id=sapply(slot(polys, "polygons"), slot, "ID"),
+                                      row.names=sapply(slot(polys, "polygons"), slot, "ID"),
+                                      stringsAsFactors=FALSE)) %>% 
+  sf::st_as_sf() %>%
+  left_join(meta_data, by = "id") %>%
+  arrange(level)
+```
+```{r}
+poly <- polys_dat %>% st_as_sf(as_points = FALSE, merge = TRUE) %>% mutate(col = as.numeric(level)) 
+
+p.st = stars::st_rasterize(poly["col"], nx = 25, ny=25)
+
+#plot(p.st)
+
+sfp <- st_as_sf(p.st) %>% group_by(col) %>% summarize(geometry = st_union(geometry))
+
+ggplot(sfp)+geom_sf(aes(fill = col))
+
+layer_overlap <- list()
+#shade_layer <- list()
+size <- 10
+j <- 1
+
+pltt <- list()
+pattern_list <- c( "horizontal", "vertical", "left2right", "right2left")
+
+for (layer in unique(poly$col)){
+  pat <- pattern_list[[j]]
+  print(layer)
+  l <- filter(sfp, col == layer) 
+  if(nrow(l)<1){next}
+  
+  layer_overlap[[layer]] <-
+    sf::st_intersection(l) %>%
+    mutate(inside = n.overlaps %% 2 == 0) %>% 
+    filter(inside == FALSE) %>%
+    patternLayer(., pattern = pat, cellsize = size, mode = "sfc") %>% 
+    sf::st_as_sf()
+  
+  size <- size + 3
+  j <- j + 1
+  if(j > length(pattern_list)){j<-1}
+}
+#all_shades <- do.call(rbind, shade_layer)
+all_layers <- do.call(rbind, layer_overlap)
+
+
+pl <-
+ggplot() + 
+  geom_sf(data = all_layers) +
+  #geom_sf(data = sfp, fill = NA, color = "white", size = 0.1) +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA))# +
+  #facet_wrap(.~col)
+
+
+ggsave(pl, filename = "~/Documents/pixelate_image/misc/mona_shades_raster25_nogrid.svg", bg = "transparent", height = 10, width = 10)
+```
+
+```{r}
+layer_overlap <- list()
+shade_layer <- list()
+d <- 1
+j <- 1
+for (layer in unique(polys_dat$fill)){
+  ifelse(j %% 2 == 0, dir <- "left2right", dir <- "right2left")
+  print(layer)
+  layer_overlap[[layer]] <-
+    polys_dat %>% 
+    filter(fill == layer) %>%
+    sf::st_make_valid(.) %>%
+    sf::st_intersection(.) %>%
+    mutate(inside = n.overlaps %% 2 == 0)%>% 
+    filter(inside == FALSE) %>%
+    stars::st_rasterize(., nx = 25, ny=25) %>%
+    st_as_sf(.)
+  
+  shade_layer[[layer]] <- patternLayer(layer_overlap[[layer]], dir, density = d, mode = "sfc") %>% sf::st_as_sf()
+  d <- d + 0.25
+  j <- j + 1
+}
+all_shades <- do.call(rbind, shade_layer)
+all_layers <- do.call(rbind, layer_overlap)
+
+
+pl <-
+ggplot() + 
+  geom_sf(data = all_shades) +
+  #geom_sf(data = polys_dat, fill = NA, color = "white", size = 1) +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA))
+
+ggsave(pl, filename = "~/Documents/pixelate_image/misc/mona_shades_raster25.svg", bg = "transparent", height = 10, width = 10)
+```
+```{r}
+sf_c <- patternLayer(mona_layer, "left2right", density = 5, mode = "sfc")
+patternLayer(mona_layer_2, "left2right", density = 3)
+```
+
+```{r}
+patternLayer(mona_layer, "diamond", density = 5)
+
+patternLayer(mona_layer, "left2right", density = 8)
+  
+
+
+```
+
+
+```{r}
+input_lines <- raster::raster("~/Documents/pixelate_image/misc/lines/7.jpg") %>% gplot_data(.) %>% filter(x < 1000, y < 1000)
+lines_long_format <- with(input_lines, input_lines[rep(1:nrow(input_lines), value),])
+
+line_poly<-
+    lines_long_format %>%
+    ggplot(., aes(x, y)) +
+    stat_density_2d(
+      aes(),
+      n = 500
+    ) + 
+    scale_fill_steps(n.breaks = 2) +
+    guides(fill = "none") +
+    theme_classic() +
+    theme(axis.line = element_blank(),
+          axis.text = element_blank(),
+          axis.title = element_blank(),
+          axis.ticks = element_blank(),
+          plot.margin = margin(0,0,0,0),
+          panel.background = element_rect(fill = "transparent"),
+          plot.background = element_rect(fill = "transparent", color = NA))
+```

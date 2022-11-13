@@ -44,5 +44,6 @@ for image_name in $image_names;
     --pixelate \
     --nx 100 \
     --ny 100 \
-    --start_density 10;
+    --start_density 1 \
+    --density_step_size 2;
   done
