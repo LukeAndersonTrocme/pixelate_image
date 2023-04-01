@@ -2,7 +2,7 @@
 
 # Load packages and source files
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, raster, ggplot2, argparser, gtools, tools, sf, stars)
+pacman::p_load(tidyverse, raster, ggplot2, argparser, gtools, tools, sf, stars, parallel)
 source("utils.R")
 source("patternfun.R")
 
@@ -28,8 +28,11 @@ dpi <- 300
 # List all TIFF files in the ../testing/ directory
 input_files <- list.files("../testing/", pattern = "ben.*\\.tiff$", full.names = TRUE)
 
-# Loop through the input files and process each file
-for (input_file in input_files) {
+# Set the number of cores to use for parallel processing (default is 4)
+n_cores <- 4
+
+# Function to process each file in parallel
+process_files <- function(input_file) {
   output_file <- paste0(tools::file_path_sans_ext(input_file), "_output.png")
   
   cat("Processing", input_file, "...\n")
@@ -37,3 +40,5 @@ for (input_file in input_files) {
   cat("Finished processing", input_file, "\n")
 }
 
+# Use mclapply to process the files in parallel
+mclapply(input_files, process_files, mc.cores = n_cores)
