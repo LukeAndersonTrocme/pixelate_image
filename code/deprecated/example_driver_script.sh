@@ -13,7 +13,7 @@ input_dir="/Users/luke/Documents/nick_tiff"
 # names of CMYK input images
 image_names="benCyan benMagenta benYellow benBlack"
 # example suffix for output files
-suffix="_pix"
+suffix="_lowRes_mid"
 # using date to organize directories
 time_stamp=$(date +"%F")
 # path to output images
@@ -34,16 +34,18 @@ for image_name in $image_names;
   Rscript code/pixelate_image_v0.3.R \
     $input_dir/$image_name \
     $output_dir/${image_name}${suffix}.jpg \
+    --gradient_start grey10 \
+    --gradient_end grey90 \
     -n 100 \
-    -b 7 \
+    -b 8 \
     --geom polygon \
     -e ;
   Rscript code/grid_liner_v0.1.R \
     $output_dir/${image_name}${suffix}.RDS \
     $output_dir/${image_name}${suffix}.svg \
     --pixelate \
-    --nx 100 \
-    --ny 100 \
+    --nx 30 \
+    --ny 30 \
     --start_density 1 \
-    --density_step_size 2;
+    --density_step_size 0.7;
   done

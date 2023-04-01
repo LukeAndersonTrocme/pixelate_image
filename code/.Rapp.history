@@ -39,10 +39,6 @@ input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpi
 ç
 input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
   dplyr::mutate(group = ntile(value, ngroups = breaks))
-input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
-  dplyr::mutate(group = ntile(value, ngroups = breaks))
-install.packages("gtools")
-install.packages("gtools")
 install.packages("gtools")
 library(gtools)
 input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
@@ -72,7 +68,6 @@ input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpi
   separate(x_tmp, c("min", "max"), sep = ",") %>% #
   mutate(min = ifelse(!is.na(max), as.numeric(as.character(min)), as.numeric(as.character(g))))
 library(tidyverse)
-library(tidyverse)
 input <- raster::raster("~/Documents/nick_tiff/benCyan") %>% gplot_data(., maxpixels = 1e3) %>%#
   dplyr::mutate(g = quantcut(value, q = 3)) %>% #
   mutate(x_tmp = str_sub(g, 2, -2)) %>% #
@@ -95,3 +90,4 @@ input %>%#
     contour = FALSE,#
     n = 50#
   )
+install.packages("svglite")
