@@ -15,8 +15,6 @@ process_image <- function(input_tiff, output_file, geom, resolution, n, breaks, 
 }
 
 # Example usage (replace with Shiny app inputs)
-input_tiff <- "../testing/benMagenta.tiff"
-output_file <- "../testing/benMagenta_output.png"
 geom <- "raster"
 resolution <- 10000
 n <- 100
@@ -27,4 +25,15 @@ height <- 7
 width <- 7
 dpi <- 300
 
-process_image(input_tiff, output_file, geom, resolution, n, breaks, gradient_start, gradient_end, height, width, dpi)
+# List all TIFF files in the ../testing/ directory
+input_files <- list.files("../testing/", pattern = "ben.*\\.tiff$", full.names = TRUE)
+
+# Loop through the input files and process each file
+for (input_file in input_files) {
+  output_file <- paste0(tools::file_path_sans_ext(input_file), "_output.png")
+  
+  cat("Processing", input_file, "...\n")
+  process_image(input_file, output_file, geom, resolution, n, breaks, gradient_start, gradient_end, height, width, dpi)
+  cat("Finished processing", input_file, "\n")
+}
+

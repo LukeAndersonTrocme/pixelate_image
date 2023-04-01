@@ -26,8 +26,6 @@ generate_pixelated_image_data <- function(input_file, resolution) {
   data
 }
 
-
-
 # Generate ggplot image using pixelated image data
 generate_ggplot_image <- function(pixelated_image, output_file, geom, resolution, n, breaks, gradient_start, gradient_end, height, width) {
   
